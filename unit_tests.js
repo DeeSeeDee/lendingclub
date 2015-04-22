@@ -10,6 +10,7 @@ var IQRResult = stats.getIQR(IQRArray);
 assert.deepEqual(stats.getMean(testStatsArray2), 5.0, 'Test the mean.');
 assert.deepEqual(stats.getMedian(testStatsArray), 4.5, 'Test the median with an even number of values.');
 assert.deepEqual(stats.getMedian(testStatsArray2), 5, 'Test the media with an odd number of values.');
+assert.deepEqual(stats.getStandardDeviation(testStatsArray).toFixed(2), '1.71', 'Test the standard deviation.');
 assert.deepEqual(IQRResult.upper, 21.25, "Upper limit of IQR Test.");
 assert.deepEqual(IQRResult.lower, -0.75, "Lower limit of IQR Test.")
 

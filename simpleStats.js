@@ -17,6 +17,15 @@ module.exports = {
 		return sum/values.length;
 	},
 
+	getStandardDeviation: function(values){
+		var valuesMean = this.getMean(values);
+		var squaredSumsOfDiff = [];
+		values.forEach(function(value){
+			squaredSumsOfDiff.push(Math.pow((value - valuesMean), 2));
+		});
+		return Math.sqrt(this.getMean(squaredSumsOfDiff));
+	},
+	
 	numericSortAscending: function(values){
 		return values.sort(function(a,b){
 			return a - b;
