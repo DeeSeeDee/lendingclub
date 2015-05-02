@@ -2,12 +2,13 @@ const
 	https = require('https'),
 	util = require('util'),
 	credentials = require('./credentials'),
-	helpers = require('./helpers');
+	helpers = require('./helpers'),
+	querystring = require('querystring');
 
 module.exports = {
 	queryAccountsRoute: function(routeName, callback){
-		var uri = util.format('/api/investor/%s/accounts/%s/%s', helpers.version, credentials.account_id, routeName);
-		queryRoute(uri, function(data){
+		var uri = util.format('/api/investor/%s/accounts/%s/%s', helpers.version, credentials.accountId, routeName);
+		queryRouteGet(uri, function(data){
 			callback(data);
 		});
 	},
@@ -17,13 +18,20 @@ module.exports = {
 		if(showAll){
 			uri += '?showAll=true'
 		}
-		queryRoute(uri, function(data){
+		queryRouteGet(uri, function(data){
 			callback(data);
 		});
+	},
+	
+	placeOrder: function(loans, callback){
+		var uri = util.format('/api/investor/%s/accounts/%s/orders', helpers.version, credentials.accountId);
+		queryRoutePost(uri, function(data){
+			callback(data);
+		}, loans);
 	}
 };
 
-var queryRoute = function(uri, callback){
+var queryRouteGet = function(uri, callback){
 	var options = helpers.api_base;
 	options.headers['Authorization'] = credentials.api_key;
 	options.path = uri
@@ -32,7 +40,6 @@ var queryRoute = function(uri, callback){
 	
 	var api_req = https.request(options, function(res) {
 		console.log('STATUS: ' + res.statusCode);
-		console.log('HEADERS: ' + JSON.stringify(res.headers));
 		res.setEncoding('utf8');
 		res.on('data', function(chunk){
 			response += chunk;
@@ -46,4 +53,35 @@ var queryRoute = function(uri, callback){
 	api_req.on('error', function(err){
 		console.log(err);
 	});
-}
+};
+
+var queryRoutePost = function(uri, callback, data){
+	var post_data = JSON.stringify(data);
+	var options = helpers.api_base;
+		options.headers['Authorization'] = credentials.api_key;
+		options.headers['Content-Type'] = 'application/json';
+		options.headers['Content-Length'] = post_data.length;
+		options.method = "POST";
+		options.path = uri;
+		console.log(options);
+	
+	var api_req = https.request(options, function(res) {
+		console.log('STATUS: ' + res.statusCode);
+		res.setEncoding('utf8');
+		var response = '';
+		
+		res.on('data', function(chunk){
+			response += chunk;
+		});
+		
+		res.on('end', function(){
+			callback(JSON.parse(response));
+		});
+		
+	});
+	api_req.write(post_data);
+	api_req.end();
+	api_req.on('error', function(err){
+		console.log(err);
+	});
+};
