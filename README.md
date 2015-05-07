@@ -13,4 +13,4 @@ Here's a rundown of what's currently in the repository:
   
 You will need to provide your own `credentials.js` file with your account number and API key.
 
-The other files in the repository contain specific examples of how I use the API to purchase loans in an automated fashion. I've discussed these scripts in great detail in a series of blog posts available (here)[http://dandorset.me/wp/2015/04/using-the-lending-club-api-part-1/].
+The other files in the repository contain specific examples of how I use the API to purchase loans in an automated fashion. I've discussed these scripts in great detail in a series of blog posts available [here](http://dandorset.me/wp/2015/04/using-the-lending-club-api-part-1/).
