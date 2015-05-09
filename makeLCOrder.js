@@ -64,10 +64,14 @@ var buildOrder = function(numLoans, filteredLoans, gradeArray){
 	console.log(orderData);
 	console.log('\n-----------------------------------------------------------\n');
 	api.placeOrder(orderData, function(data){
+		if(!data.hasOwnProperty('orderConfirmations')){
+			console.log('No notes were purchased this time.');
+			return;
+		}
 		data.orderConfirmations.forEach(function(conf){
 			console.log(util.format('Loan id: %s ', conf.loanId));
 			console.log(util.format('Amount invested: %s' , conf.investedAmount));
-			console.log(util.format("Status: %s", ',  '.join(conf.executionStatus)));
+			console.log(util.format("Status: %s", conf.executionStatus.join(',  ')));
 			console.log('____________________\n\n');			
 		});
 	});
